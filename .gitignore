@@ -1,0 +1,7 @@
+.vscode/*
+obj/*
+bin/*
+publish/*
+.idea/*
+.vs/*
+Folder.DotSettings.user
