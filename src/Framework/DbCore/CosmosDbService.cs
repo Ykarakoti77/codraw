@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.Azure.Cosmos;
 
 namespace Codraw.Framework.DbCore;
@@ -34,7 +33,6 @@ public class CosmosDbService<Item>(CosmosClient dbClient, string databaseName, s
     public async Task UpsertItemAsync(Item item)
     {
         var t = GetType(item.GetCosmosDbPartitionKey());
-        Console.WriteLine(JsonSerializer.Serialize(item));
         await this._container.UpsertItemAsync(
             item,
             new PartitionKey(Cast(item.GetCosmosDbPartitionKey(), t))

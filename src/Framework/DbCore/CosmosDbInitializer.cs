@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Microsoft.Azure.Cosmos;
 
 namespace Codraw.Framework.DbCore;
@@ -9,8 +8,7 @@ public static class CosmosDbInitializer
         IConfigurationSection configurationSection
     )
         where T : ICosmosDbRecord
-    {   
-        Console.WriteLine(JsonSerializer.Serialize(configurationSection));
+    {
         string databaseName =
             configurationSection["DatabaseName"]
             ?? throw new ArgumentException("DatabaseName cannot be empty");

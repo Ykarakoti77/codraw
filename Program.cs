@@ -1,5 +1,7 @@
+using Codraw.Configurations;
 using Codraw.Framework.DbCore;
 using Codraw.Models.User;
+using Codraw.Services.AuthService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,8 +18,9 @@ var config = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-var key = config.GetSection("Jwt").GetSection("Key").Value;
-
+var key =
+    config.GetSection("Jwt").GetSection("Key").Value
+    ?? throw new InvalidOperationException("JWT key is missing from the configuration.");
 
 builder
     .Services.AddAuthentication(x =>
@@ -41,12 +44,14 @@ builder
 // ---------------------- Db Services --------------------
 
 var userDbService = CosmosDbInitializer.InitializeCosmosClientInstance<UserDetails>(
-    config.GetSection("UsersDb"));
-// );
+    config.GetSection("UsersDb")
+);
 
 // -------------------------- DI --------------------------
 
 builder.Services.AddSingleton<ICosmosDbService<UserDetails>>(userDbService);
+builder.Services.AddSingleton<IConfigManager, ConfigManager>();
+builder.Services.AddSingleton<IAuthClient, AuthClient>();
 
 // -------------------------- App -------------------------
 
@@ -66,5 +71,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
