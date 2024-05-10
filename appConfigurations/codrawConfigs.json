@@ -1,4 +1,8 @@
 {
     "appVersion": "1.0.0",
-    "jwtTokenExpiryTimeInHours": 100
+    "jwtTokenExpiryTimeInHours": 100,
+    "googleAuth": {
+        "redirectUri": "http://localhost:3000",
+        "googleFetchAccessTokenUri": "https://oauth2.googleapis.com/token"
+    }
 }
