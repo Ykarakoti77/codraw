@@ -17,6 +17,7 @@ public class RegistrationClient(
             if (await _authClient.CheckUserInDbAsync(userDetails.Email))
                 throw new Exception("User already registered");
             await _userDbService.UpsertItemAsync(userDetails);
+            _logger.LogInformation("Registering user, userId : {userId} ", userDetails.UserId);
         }
         catch (Exception ex)
         {
