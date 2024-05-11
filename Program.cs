@@ -2,6 +2,8 @@ using Codraw.Configurations;
 using Codraw.Framework.DbCore;
 using Codraw.Models.User;
 using Codraw.Services.AuthService;
+using Codraw.Services.GoogleAuthService;
+using Codraw.Services.RegistrationServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -49,9 +51,12 @@ var userDbService = CosmosDbInitializer.InitializeCosmosClientInstance<UserDetai
 
 // -------------------------- DI --------------------------
 
+builder.Services.AddHttpClient<IGoogleAuthClient, GoogleAuthClient>().SetHandlerLifetime(TimeSpan.FromMinutes(15));
 builder.Services.AddSingleton<ICosmosDbService<UserDetails>>(userDbService);
 builder.Services.AddSingleton<IConfigManager, ConfigManager>();
 builder.Services.AddSingleton<IAuthClient, AuthClient>();
+builder.Services.AddSingleton<IGoogleAuthClient, GoogleAuthClient>();
+builder.Services.AddSingleton<IRegistrationClient, RegistrationClient>();
 
 // -------------------------- App -------------------------
 

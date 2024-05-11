@@ -78,4 +78,42 @@ public class AuthClient(
 
         return user;
     }
+
+    public async Task<bool> CheckUserInDbAsync(string email)
+    {
+        try
+        {
+            var query = $" SELECT * FROM c where c.email = '{email}' ";
+            var result = await _userDbService.GetItemsAsync(query);
+            if (result.Count() > 1)
+                throw new Exception("Multiple users exist");
+            if (result.IsNullOrEmpty())
+                return false;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation("Error in checking if user exists in db : {error}", ex.Message);
+            throw new Exception("User in db check failed");
+        }
+    }
+
+    public async Task<UserDetails> GetUserWithEmailAsync(string email)
+    {
+        try
+        {
+            var query = $" SELECT * FROM c where c.email = '{email}' ";
+            var result = await _userDbService.GetItemsAsync(query);
+            if (result.Count() > 1)
+                throw new Exception("Multiple users exist");
+            if (result.IsNullOrEmpty())
+                throw new Exception("User not found");
+            return result.First();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogInformation("Error in getting user from db with email : {error}", ex.Message);
+            throw new Exception("Error in getting user from db with email");
+        }
+    }
 }

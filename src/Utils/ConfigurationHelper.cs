@@ -1,14 +1,36 @@
-namespace Codraw.Utils;
-public static class ConfigurationHelper
+namespace Codraw.Utils
 {
-    public static string GetJwtKey()
+    public static class ConfigurationHelper
     {
-        var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: false)
-            .AddEnvironmentVariables()
-            .Build();
+        private static readonly IConfiguration _configuration;
 
-        var jeyKey = config.GetSection("Jwt").GetSection("Key").Value;
-        return jeyKey ?? throw new ArgumentNullException(jeyKey, "jwt Key is null");
+        static ConfigurationHelper()
+        {
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddEnvironmentVariables()
+                .Build();
+        }
+
+        public static string GetJwtKey()
+        {
+            return GetConfigurationValue("Jwt:Key");
+        }
+
+        public static string GetGoogleClientId()
+        {
+            return GetConfigurationValue("GoogleAuth:ClientId");
+        }
+
+        public static string GetGoogleClientSecret()
+        {
+            return GetConfigurationValue("GoogleAuth:ClientSecret");
+        }
+
+        private static string GetConfigurationValue(string sectionKey)
+        {
+            var value = _configuration[sectionKey];
+            return value ?? throw new ArgumentNullException(sectionKey, $"{sectionKey} is null");
+        }
     }
 }

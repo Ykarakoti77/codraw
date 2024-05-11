@@ -14,6 +14,8 @@ public class UserDetails() : ICosmosDbRecord
 
     [JsonPropertyName("partitionKey")]
     public string PartitionKey { get; set; } = DateTime.UtcNow.ToString("MM-yyyy");
+
+    [JsonPropertyName("email")]
     public string Email { get; set; } = "";
 
     [JsonPropertyName("firstName")]
