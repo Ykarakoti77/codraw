@@ -4,7 +4,7 @@ using Codraw.Services.GoogleAuthService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Codraw.Controllers;
+namespace Codraw.Controllers.Auth;
 
 [Authorize]
 [ApiController]
@@ -14,7 +14,7 @@ public class Auth(ILogger<Auth> logger, IAuthClient authClient, IGoogleAuthClien
     // todo: login should return whole of authtoken (with jwt_token inside)
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Post([FromBody] PasswordLogin loginDetails)
+    public async Task<IActionResult> Login([FromBody] PasswordLogin loginDetails)
     {
         try
         {
@@ -30,7 +30,7 @@ public class Auth(ILogger<Auth> logger, IAuthClient authClient, IGoogleAuthClien
 
     [AllowAnonymous]
     [HttpPost("glogin")]
-    public async Task<IActionResult> PostGoogle([FromBody] GoogleLogin loginDetails)
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLogin loginDetails)
     {
         try
         {
@@ -46,7 +46,7 @@ public class Auth(ILogger<Auth> logger, IAuthClient authClient, IGoogleAuthClien
 
     [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN, TRADER")]
     [HttpGet("logout")]
-    public IActionResult Get()
+    public IActionResult Logout()
     {
         try
         {
