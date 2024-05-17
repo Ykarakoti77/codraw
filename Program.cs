@@ -1,9 +1,12 @@
 using Codraw.Configurations;
 using Codraw.Framework.DbCore;
+using Codraw.Models.Team;
 using Codraw.Models.User;
 using Codraw.Services.AuthService;
 using Codraw.Services.GoogleAuthService;
 using Codraw.Services.RegistrationServices;
+using Codraw.Services.TeamBoardService;
+using Codraw.Services.TeamsService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -48,15 +51,27 @@ builder
 var userDbService = CosmosDbInitializer.InitializeCosmosClientInstance<UserDetails>(
     config.GetSection("UsersDb")
 );
+var teamsDbService = CosmosDbInitializer.InitializeCosmosClientInstance<Team>(
+    config.GetSection("TeamsDb")
+);
+var teamBoardsDbService = CosmosDbInitializer.InitializeCosmosClientInstance<TeamBoard>(
+    config.GetSection("TeamBoardsDb")
+);
+
 
 // -------------------------- DI --------------------------
 
-builder.Services.AddHttpClient<IGoogleAuthClient, GoogleAuthClient>().SetHandlerLifetime(TimeSpan.FromMinutes(15));
 builder.Services.AddSingleton<ICosmosDbService<UserDetails>>(userDbService);
+builder.Services.AddSingleton<ICosmosDbService<Team>>(teamsDbService);
+builder.Services.AddSingleton<ICosmosDbService<TeamBoard>>(teamBoardsDbService);
+
+builder.Services.AddHttpClient<IGoogleAuthClient, GoogleAuthClient>().SetHandlerLifetime(TimeSpan.FromMinutes(15));
 builder.Services.AddSingleton<IConfigManager, ConfigManager>();
 builder.Services.AddSingleton<IAuthClient, AuthClient>();
 builder.Services.AddSingleton<IGoogleAuthClient, GoogleAuthClient>();
 builder.Services.AddSingleton<IRegistrationClient, RegistrationClient>();
+builder.Services.AddSingleton<ITeamsClient, TeamsClient>();
+builder.Services.AddSingleton<ITeamBoardClient, TeamBoardClient>();
 
 // -------------------------- App -------------------------
 

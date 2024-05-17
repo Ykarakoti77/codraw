@@ -24,6 +24,9 @@ public class UserDetails() : ICosmosDbRecord
     [JsonPropertyName("lastName")]
     public string LastName { get; set; } = "";
 
+    [JsonPropertyName("userName")]
+    public string UserName { get; set; } = "";
+
     [JsonPropertyName("password")]
     public string Password { get; set; } = "";
 
